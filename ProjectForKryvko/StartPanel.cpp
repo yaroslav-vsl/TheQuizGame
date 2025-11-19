@@ -3,9 +3,12 @@
 #include "MyButton.h"
 
 StartPanel::StartPanel(wxWindow* parent, MainFrame* mainFrame)
-    : ImagePanel(parent, L"background.jpg"), mainFrame(mainFrame)
+    : ImagePanel(parent, L"background.jpg", mainFrame->GetClientSize()), mainFrame(mainFrame)
 {
+    wxSize sizeImg = mainFrame->GetSize();
+    this->SetSize(sizeImg);
     this->LoadFromFile(L"background.jpg");
+
     // Если фоновая картинка не загрузилась, устанавливаем цвет фона
     if (!m_hasBackground) {
         SetBackgroundColour(wxColour(240, 240, 240));
@@ -13,31 +16,21 @@ StartPanel::StartPanel(wxWindow* parent, MainFrame* mainFrame)
 
     wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
 
-    // Добавляем заголовок
-    wxStaticText* title = new wxStaticText(this, wxID_ANY, "ВИКТОРИНА");
-    title->SetFont(wxFont(24, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
-    title->SetForegroundColour(wxColour(255, 255, 255));
-    title->SetBackgroundColour(wxColour(0, 0, 0, 100)); // Полупрозрачный фон
-    sizer->Add(title, 0, wxALIGN_CENTER | wxTOP, 100);
+    //wxBitmap roundBitmap = CreateRoundButton("СТАРТ", wxColour(255, 0, 0));
+    //startButton = new wxBitmapButton(this, wxID_ANY, roundBitmap, wxDefaultPosition, wxSize(300, 300));
+    //sizer->AddStretchSpacer();
+    //sizer->Add(startButton, 0, wxALIGN_CENTER | wxALIGN_CENTER_VERTICAL);
+    //sizer->AddStretchSpacer();
 
-    // Добавляем описание
-    wxStaticText* description = new wxStaticText(this, wxID_ANY, "Проверьте свои знания!");
-    description->SetFont(wxFont(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
-    description->SetForegroundColour(wxColour(255, 255, 255));
-    description->SetBackgroundColour(wxColour(0, 0, 0, 100));
-    sizer->Add(description, 0, wxALIGN_CENTER | wxTOP, 20);
-
+    MyButton* startButton = new MyButton(this, wxID_ANY, wxPoint(100, 100), wxSize(300, 300));
     sizer->AddStretchSpacer();
-
-    wxBitmap roundBitmap = CreateRoundButton("СТАРТ", wxColour(255, 0, 0));
-    startButton = new wxBitmapButton(this, wxID_ANY, roundBitmap,
-        wxDefaultPosition, wxSize(150, 150));
-
-    sizer->Add(startButton, 0, wxALIGN_CENTER | wxALL, 50);
+    sizer->Add(startButton, 0, wxALIGN_CENTER | wxALIGN_CENTER_VERTICAL);
+    sizer->AddStretchSpacer();
 
     SetSizer(sizer);
 
-    startButton->Bind(wxEVT_BUTTON, &StartPanel::OnStartButtonClick, this);
+    //startButton->Bind(wxEVT_BUTTON, &StartPanel::OnStartButtonClick, this);
+    startButton->Bind(wxEVT_LEFT_DOWN, &StartPanel::OnStartButtonClick, this);
 }
 
 wxBitmap StartPanel::CreateRoundButton(const wxString& text, const wxColour& color)
@@ -70,8 +63,12 @@ wxBitmap StartPanel::CreateRoundButton(const wxString& text, const wxColour& col
     return bitmap;
 }
 
-
-void StartPanel::OnStartButtonClick(wxCommandEvent& event)
+void StartPanel::OnStartButtonClick(wxMouseEvent &event)
 {
     mainFrame->StartGame();
 }
+
+//void StartPanel::OnStartButtonClick(wxCommandEvent &event)
+//{
+//    mainFrame->StartGame();
+//}

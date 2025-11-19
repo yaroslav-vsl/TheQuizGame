@@ -135,6 +135,7 @@
     <ClInclude Include="FractalPanel.h" />
     <ClInclude Include="GameBoardPanel.h" />
     <ClInclude Include="ImagePanel.h" />
+    <ClInclude Include="JuliaFractalPanel.h" />
     <ClInclude Include="KochSnowflakePanel.h" />
     <ClInclude Include="MainFrame.h" />
     <ClInclude Include="MyButton.h" />
@@ -151,6 +152,7 @@
     <ClCompile Include="FractalPanel.cpp" />
     <ClCompile Include="GameBoardPanel.cpp" />
     <ClCompile Include="ImagePanel.cpp" />
+    <ClCompile Include="JuliaFractalPanel.cpp" />
     <ClCompile Include="KochSnowflakePanel.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainFrame.cpp" />

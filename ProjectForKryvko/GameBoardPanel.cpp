@@ -9,8 +9,10 @@ EVT_SIZE(GameBoardPanel::OnSize)
 wxEND_EVENT_TABLE()
 
 GameBoardPanel::GameBoardPanel(wxWindow* parent, MainFrame* mainFrame)
-    : ImagePanel(parent,L"board_background.jpg"), mainFrame(mainFrame)
+    : ImagePanel(parent,L""), mainFrame(mainFrame)
 {
+    wxSize sizeImg = mainFrame->GetSize();
+    this->SetSize(sizeImg);
     this->LoadFromFile(L"background.jpg");
     // Если фоновая картинка не загрузилась, устанавливаем цвет фона
     if (!m_hasBackground) {
@@ -18,13 +20,6 @@ GameBoardPanel::GameBoardPanel(wxWindow* parent, MainFrame* mainFrame)
     }
 
     wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
-    
-    // Добавляем заголовок с полупрозрачным фоном
-    wxStaticText* title = new wxStaticText(this, wxID_ANY, "Игровое поле - 16 вопросов");
-    title->SetFont(wxFont(20, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
-    title->SetForegroundColour(wxColour(40, 40, 40, 255));
-    title->SetBackgroundColour(wxColour(255, 255, 255, 0));
-    mainSizer->Add(title, 0, wxALIGN_CENTER | wxTOP, 20);
 
     // Создаем контейнер для кнопок
     MyTransparentPanel* buttonContainer = new MyTransparentPanel(this);
@@ -36,7 +31,7 @@ GameBoardPanel::GameBoardPanel(wxWindow* parent, MainFrame* mainFrame)
 
     // Создаем 16 кнопок
     for (int i = 0; i < 16; i++) {
-        cellButtons[i] = new wxButton(buttonContainer, wxID_ANY, wxString::Format("%d", i + 1), wxDefaultPosition, wxSize(50, 50));
+        cellButtons[i] = new wxButton(buttonContainer, wxID_ANY, wxString::Format("%d", i + 1), wxDefaultPosition, wxSize(80, 80));
         cellButtons[i]->SetFont(wxFont(12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
         cellButtons[i]->Bind(wxEVT_BUTTON, &GameBoardPanel::OnCellClick, this);
     }
@@ -48,56 +43,56 @@ GameBoardPanel::GameBoardPanel(wxWindow* parent, MainFrame* mainFrame)
     PositionButtonsInInfinityShape();
 }
 
-//void GameBoardPanel::UpdateButtonColors()
-//{
-//    for (int i = 0; i < 16; i++) {
-//        if (mainFrame->IsQuestionAnswered(i)) {
-//            // Зеленый цвет для отвеченных вопросов
-//            cellButtons[i]->SetBackgroundColour(wxColour(67, 160, 71));
-//            cellButtons[i]->SetForegroundColour(*wxWHITE);
-//            cellButtons[i]->SetLabel(wxString::Format("%d", i + 1)); // Добавляем галочку
-//        }
-//        else {
-//            // Синий цвет для неотвеченных вопросов
-//            cellButtons[i]->SetBackgroundColour(wxColour(156, 39, 176));
-//            cellButtons[i]->SetForegroundColour(*wxWHITE);
-//            cellButtons[i]->SetLabel(wxString::Format("%d", i + 1));
-//        }
-//        // Принудительно обновляем внешний вид кнопки
-//        cellButtons[i]->Refresh();
-//    }
-//}
-
 void GameBoardPanel::UpdateButtonColors()
 {
-    int answered = mainFrame->GetCorrectAnswersCount();
-
     for (int i = 0; i < 16; i++) {
         if (mainFrame->IsQuestionAnswered(i)) {
-            // "Прокачка" цвета по мере прогресса
-            if (answered <= 4) {
-                cellButtons[i]->SetBackgroundColour(wxColour(129, 199, 132)); // Новичок - светло-зеленый
-            }
-            else if (answered <= 8) {
-                cellButtons[i]->SetBackgroundColour(wxColour(56, 142, 60));   // Ученик - зеленый
-            }
-            else if (answered <= 12) {
-                cellButtons[i]->SetBackgroundColour(wxColour(255, 152, 0));   // Мастер - оранжевый
-            }
-            else {
-                cellButtons[i]->SetBackgroundColour(wxColour(233, 30, 99));   // Гуру - розовый
-            }
-            cellButtons[i]->SetForegroundColour(wxColour(255, 255, 255));
+            // Зеленый цвет для отвеченных вопросов
+            cellButtons[i]->SetBackgroundColour(wxColour(67, 160, 71));
+            cellButtons[i]->SetForegroundColour(*wxWHITE);
+            cellButtons[i]->SetLabel(wxString::Format("%d", i + 1)); // Добавляем галочку
         }
         else {
-            // Неотвеченные - серые "заблокированные"
-            cellButtons[i]->SetBackgroundColour(wxColour(156, 39, 176));
+            // Синий цвет для неотвеченных вопросов
+            cellButtons[i]->SetBackgroundColour(wxColour(100, 150, 200));
             cellButtons[i]->SetForegroundColour(*wxWHITE);
-            cellButtons[i]->SetLabel(wxString::Format("%d", i + 1)); // С замком
+            cellButtons[i]->SetLabel(wxString::Format("%d", i + 1));
         }
+        // Принудительно обновляем внешний вид кнопки
         cellButtons[i]->Refresh();
     }
 }
+
+//void GameBoardPanel::UpdateButtonColors()
+//{
+//    int answered = mainFrame->GetCorrectAnswersCount();
+//
+//    for (int i = 0; i < 16; i++) {
+//        if (mainFrame->IsQuestionAnswered(i)) {
+//            // "Прокачка" цвета по мере прогресса
+//            if (answered <= 4) {
+//                cellButtons[i]->SetBackgroundColour(wxColour(129, 199, 132)); // Новичок - светло-зеленый
+//            }
+//            else if (answered <= 8) {
+//                cellButtons[i]->SetBackgroundColour(wxColour(56, 142, 60));   // Ученик - зеленый
+//            }
+//            else if (answered <= 12) {
+//                cellButtons[i]->SetBackgroundColour(wxColour(255, 152, 0));   // Мастер - оранжевый
+//            }
+//            else {
+//                cellButtons[i]->SetBackgroundColour(wxColour(233, 30, 99));   // Гуру - розовый
+//            }
+//            cellButtons[i]->SetForegroundColour(wxColour(255, 255, 255));
+//        }
+//        else {
+//            // Неотвеченные - серые "заблокированные"
+//            cellButtons[i]->SetBackgroundColour(wxColour(156, 39, 176));
+//            cellButtons[i]->SetForegroundColour(*wxWHITE);
+//            cellButtons[i]->SetLabel(wxString::Format("%d", i + 1)); // С замком
+//        }
+//        cellButtons[i]->Refresh();
+//    }
+//}
 
 //void GameBoardPanel::UpdateButtonColors()
 //{
@@ -130,7 +125,7 @@ void GameBoardPanel::PositionButtonsInInfinityShape()
     wxSize containerSize = GetClientSize();
     int centerX = containerSize.GetWidth() / 2;
     int centerY = containerSize.GetHeight() / 2;
-    int radius = std::min(centerX, centerY) * 0.7;
+    int radius = std::min(centerX, centerY) * 0.9;
 
     // Параметрическое уравнение лемнискаты Бернулли (символ бесконечности)
     for (int i = 0; i < 16; i++) {
@@ -145,7 +140,7 @@ void GameBoardPanel::PositionButtonsInInfinityShape()
         int posX = centerX + static_cast<int>(x);
         int posY = centerY + static_cast<int>(y);
 
-        cellButtons[i]->SetPosition(wxPoint(posX - 25, posY - 25));
+        cellButtons[i]->SetPosition(wxPoint(posX - 40, posY - 40));
     }
 }
 

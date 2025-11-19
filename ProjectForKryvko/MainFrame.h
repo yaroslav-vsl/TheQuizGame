@@ -13,7 +13,9 @@ class MainFrame : public wxFrame
 public:
     enum FractalType {
         FRACTAL_KOCH_SNOWFLAKE = 0,
-        FRACTAL_FERN = 1
+        FRACTAL_FERN = 1,
+        FRACTAL_MANDELBROT = 2,
+        FRACTAL_JULIA = 3  // Добавляем Жюлиа
     };
 
     FractalType GetFractalType() const { return m_fractalType; }
@@ -34,6 +36,7 @@ public:
         std::vector<std::string> answers;
         int correct;
         bool answered;
+        std::string hint;
     };
     std::vector<bool> answered_question;
     std::vector<Question> questions;

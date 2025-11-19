@@ -4,13 +4,9 @@
 
 #include <wx/mstream.h>
 
-BEGIN_EVENT_TABLE(ImagePanel, wxWindow)
-EVT_ERASE_BACKGROUND(ImagePanel::OnEraseBackground)
-END_EVENT_TABLE()
-
 //===========================================================================================================
 
-ImagePanel::ImagePanel(wxWindow* parent, const std::wstring &imagePath, wxWindowID winid) :
+ImagePanel::ImagePanel(wxWindow* parent, const std::wstring &imagePath, const wxSize &size, wxWindowID winid) :
 	wxPanel(parent, winid, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE),
 	bitmap(nullptr),
 	m_hasBackground(false)
@@ -20,6 +16,8 @@ ImagePanel::ImagePanel(wxWindow* parent, const std::wstring &imagePath, wxWindow
 	Bind(wxEVT_PAINT, &ImagePanel::OnPaint, this);
 	Bind(wxEVT_SIZE, &ImagePanel::OnSize, this);
 
+	width = size.x;
+	height = size.y;
 
 	const auto w = this->GetSize().GetX();
 	const auto h = this->GetSize().GetY();
@@ -48,8 +46,8 @@ void ImagePanel::Init(const std::wstring& path_, const wxImage& image)
 {
 	if (image.IsOk())
 	{
-		constexpr auto width = 1920;
-		constexpr auto height = 1080;
+		//const auto width = this->GetSize().GetX();
+		//const auto height = this->GetSize().GetY();
 
 		bitmap = new wxBitmap(image.Scale(width, height, wxIMAGE_QUALITY_HIGH));
 		m_hasBackground = true;
@@ -108,7 +106,10 @@ void ImagePanel::OnSize(wxSizeEvent& event)
 	event.Skip();
 }
 
-void ImagePanel::OnEraseBackground(wxEraseEvent& event)
-{
+//===========================================================================================================
 
+void ImagePanel::SetSize(wxSize &size)
+{
+	width = size.x;
+	height = size.y;
 }

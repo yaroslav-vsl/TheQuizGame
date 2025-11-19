@@ -85,15 +85,12 @@ void FractalPanel::SetFractalType(MainFrame::FractalType type)
         switch (type) {
         case MainFrame::FRACTAL_KOCH_SNOWFLAKE:
             m_currentFractal = new KochSnowflakePanel(m_fractalContainer, mainFrame);
-            //wxLogMessage("Создана снежинка Коха");
             break;
         case MainFrame::FRACTAL_FERN:
             m_currentFractal = new FernFractalPanel(m_fractalContainer, mainFrame);
-            //wxLogMessage("Создан папоротник Барнсли");
             break;
-        default:
-           // wxLogError("Неизвестный тип фрактала: %d", static_cast<int>(type));
-            return;
+        case MainFrame::FRACTAL_JULIA:
+            break;
         }
 
         if (m_currentFractal) {

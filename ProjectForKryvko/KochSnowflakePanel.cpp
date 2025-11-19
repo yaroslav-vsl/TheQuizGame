@@ -24,11 +24,22 @@ KochSnowflakePanel::KochSnowflakePanel(wxWindow* parent, MainFrame* mainFrame)
     int totalQuestions = mainFrame->GetTotalQuestions();
 
     m_maxIterations = 0; // Начинаем с 0
-    if (correctAnswers > 0) m_maxIterations = 1;
-    if (correctAnswers >= totalQuestions * 0.25) m_maxIterations = 2;
-    if (correctAnswers >= totalQuestions * 0.5) m_maxIterations = 3;
-    if (correctAnswers >= totalQuestions * 0.75) m_maxIterations = 4;
-    if (correctAnswers >= totalQuestions) m_maxIterations = 5;
+    if (correctAnswers == 1) m_maxIterations = 1;
+    if (correctAnswers == 2) m_maxIterations = 2;
+    if (correctAnswers == 3) m_maxIterations = 3;
+    if (correctAnswers == 4) m_maxIterations = 4;
+    if (correctAnswers == 5) m_maxIterations = 5;
+    if (correctAnswers == 6) m_maxIterations = 6;
+    if (correctAnswers == 7) m_maxIterations = 7;
+    if (correctAnswers == 8) m_maxIterations = 8;
+    if (correctAnswers == 9) m_maxIterations = 9;
+    if (correctAnswers == 10) m_maxIterations = 10;
+    if (correctAnswers == 11) m_maxIterations = 11;
+    if (correctAnswers == 12) m_maxIterations = 12;
+    if (correctAnswers == 13) m_maxIterations = 13;
+    if (correctAnswers == 14) m_maxIterations = 14;
+    if (correctAnswers == 15) m_maxIterations = 15;
+    if (correctAnswers == 16) m_maxIterations = 16;
 
     // Создаем прогресс-лейбл
     wxBoxSizer* mainSizer = dynamic_cast<wxBoxSizer*>(GetSizer());
@@ -54,7 +65,7 @@ void KochSnowflakePanel::StartAnimation()
 {
     if (!m_timer && m_currentIteration < m_maxIterations) {
         m_timer = new wxTimer(this, wxID_ANY);
-        m_timer->Start(800); // Медленная анимация для лучшего восприятия
+        m_timer->Start(300); // Медленная анимация для лучшего восприятия
     }
 }
 

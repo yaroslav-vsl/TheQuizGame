@@ -2,6 +2,7 @@
 #include "FractalBase.h"
 #include "FernFractalPanel.h"
 #include "KochSnowflakePanel.h"
+#include "JuliaFractalPanel.h"
 
 class FractalPanel : public wxPanel
 {
