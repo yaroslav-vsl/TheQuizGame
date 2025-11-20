@@ -15,7 +15,9 @@ public:
         FRACTAL_KOCH_SNOWFLAKE = 0,
         FRACTAL_FERN = 1,
         FRACTAL_MANDELBROT = 2,
-        FRACTAL_JULIA = 3  // Добавляем Жюлиа
+        FRACTAL_TRIANGLE = 3,
+        FRACTAL_TETRAHEDRON = 4,
+        FRACTAL_DRAGON = 5// Добавляем Жюлиа
     };
 
     FractalType GetFractalType() const { return m_fractalType; }

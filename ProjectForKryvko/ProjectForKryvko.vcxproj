@@ -130,6 +130,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="app.h" />
+    <ClInclude Include="DragonCurvePanel.h" />
     <ClInclude Include="FernFractalPanel.h" />
     <ClInclude Include="FractalBase.h" />
     <ClInclude Include="FractalPanel.h" />
@@ -138,14 +139,18 @@
     <ClInclude Include="JuliaFractalPanel.h" />
     <ClInclude Include="KochSnowflakePanel.h" />
     <ClInclude Include="MainFrame.h" />
+    <ClInclude Include="MandelbrotPanel.h" />
     <ClInclude Include="MyButton.h" />
     <ClInclude Include="QuestionPanel.h" />
     <ClInclude Include="RotatedText.h" />
+    <ClInclude Include="SierpinskiTetrahedronPanel.h" />
+    <ClInclude Include="SierpinskiTrianglePanel.h" />
     <ClInclude Include="StartPanel.h" />
     <ClInclude Include="TransparentImagePanel.h" />
     <ClInclude Include="TransparentPanel.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DragonCurvePanel.cpp" />
     <ClCompile Include="app.cpp" />
     <ClCompile Include="FernFractalPanel.cpp" />
     <ClCompile Include="FractalBase.cpp" />
@@ -156,8 +161,11 @@
     <ClCompile Include="KochSnowflakePanel.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainFrame.cpp" />
+    <ClCompile Include="MandelbrotPanel.cpp" />
     <ClCompile Include="QuestionPanel.cpp" />
     <ClCompile Include="RotatedText.cpp" />
+    <ClCompile Include="SierpinskiTetrahedronPanel.cpp" />
+    <ClCompile Include="SierpinskiTrianglePanel.cpp" />
     <ClCompile Include="StartPanel.cpp" />
     <ClCompile Include="TransparentImagePanel.cpp" />
   </ItemGroup>

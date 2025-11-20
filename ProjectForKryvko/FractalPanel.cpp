@@ -2,6 +2,11 @@
 #include "MainFrame.h"
 #include "FernFractalPanel.h"
 #include "KochSnowflakePanel.h"
+#include "SierpinskiTrianglePanel.h"
+#include <wx/timer.h>
+#include "SierpinskiTetrahedronPanel.h"
+#include "DragonCurvePanel.h"
+#include "MandelbrotPanel.h"
 
 wxBEGIN_EVENT_TABLE(FractalPanel, wxPanel)
 EVT_CHOICE(wxID_ANY, FractalPanel::OnFractalChoice)
@@ -15,17 +20,21 @@ FractalPanel::FractalPanel(wxWindow* parent, MainFrame* mainFrame)
     wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
 
     // Выбор фрактала
-    //wxBoxSizer* choiceSizer = new wxBoxSizer(wxHORIZONTAL);
-    //choiceSizer->Add(new wxStaticText(this, wxID_ANY, "Выберите фрактал:"),
-    //    0, wxALIGN_CENTER | wxRIGHT, 10);
+    wxBoxSizer* choiceSizer = new wxBoxSizer(wxHORIZONTAL);
+    choiceSizer->Add(new wxStaticText(this, wxID_ANY, "Выберите фрактал:"),
+        0, wxALIGN_CENTER | wxRIGHT, 10);
 
-    //m_fractalChoice = new wxChoice(this, wxID_ANY);
-    //m_fractalChoice->Append("Снежинка Коха");
-    //m_fractalChoice->Append("Папоротник Барнсли");
-    //m_fractalChoice->SetSelection(static_cast<int>(mainFrame->GetFractalType()));
-    //choiceSizer->Add(m_fractalChoice, 0, wxALIGN_CENTER);
+    m_fractalChoice = new wxChoice(this, wxID_ANY);
+    m_fractalChoice->Append("Снежинка Коха");
+    m_fractalChoice->Append("Папоротник Барнсли");
+    m_fractalChoice->Append("Мандельброт");
+    m_fractalChoice->Append("Треугольник Серпинского");
+    m_fractalChoice->Append("Тэтраедр Серпинского");
+    m_fractalChoice->Append("Дракон");
+    m_fractalChoice->SetSelection(static_cast<int>(mainFrame->GetFractalType()));
+    choiceSizer->Add(m_fractalChoice, 0, wxALIGN_CENTER);
 
-    //mainSizer->Add(choiceSizer, 0, wxALIGN_CENTER | wxTOP, 20);
+    mainSizer->Add(choiceSizer, 0, wxALIGN_CENTER | wxTOP, 20);
 
     // Создаем контейнер для фрактала с правильным сайзером
     m_fractalContainer = new wxPanel(this);
@@ -89,7 +98,17 @@ void FractalPanel::SetFractalType(MainFrame::FractalType type)
         case MainFrame::FRACTAL_FERN:
             m_currentFractal = new FernFractalPanel(m_fractalContainer, mainFrame);
             break;
-        case MainFrame::FRACTAL_JULIA:
+        case MainFrame::FRACTAL_MANDELBROT:
+            m_currentFractal = new MandelbrotPanel(m_fractalContainer, mainFrame);
+            break;
+        case MainFrame::FRACTAL_TRIANGLE:
+            m_currentFractal = new SierpinskiTrianglePanel(m_fractalContainer, mainFrame);
+            break;
+        case MainFrame::FRACTAL_TETRAHEDRON:
+            m_currentFractal = new SierpinskiTetrahedronPanel(m_fractalContainer, mainFrame);
+            break;
+        case MainFrame::FRACTAL_DRAGON:
+            m_currentFractal = new DragonCurvePanel(m_fractalContainer, mainFrame);
             break;
         }
 
@@ -105,7 +124,7 @@ void FractalPanel::SetFractalType(MainFrame::FractalType type)
             m_currentFractal->StartAnimation();
 
             // Обновляем выбор в комбобоксе
-            //m_fractalChoice->SetSelection(static_cast<int>(type));
+            m_fractalChoice->SetSelection(static_cast<int>(type));
 
             // Сохраняем выбор
             mainFrame->SetFractalType(type);
@@ -125,7 +144,7 @@ void FractalPanel::SetFractalType(MainFrame::FractalType type)
 void FractalPanel::OnFractalChoice(wxCommandEvent& event)
 {
     int selection = event.GetSelection();
-    if (selection >= 0 && selection <= 1) {
+    if (selection >= 0 && selection <= 5) {
         MainFrame::FractalType type = static_cast<MainFrame::FractalType>(selection);
         SetFractalType(type);
     }
