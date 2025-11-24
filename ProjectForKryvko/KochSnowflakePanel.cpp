@@ -31,7 +31,7 @@ KochSnowflakePanel::KochSnowflakePanel(wxWindow* parent, MainFrame* mainFrame)
     if (correctAnswers >= 10) m_maxIterations = 5;
     if (correctAnswers >= 12) m_maxIterations = 6;
     if (correctAnswers >= 14) m_maxIterations = 7;
-    if (correctAnswers >= 16) m_maxIterations = 8;
+    if (correctAnswers >= 16) m_maxIterations = 10;
 
     // Создаем прогресс-лейбл
     wxBoxSizer* mainSizer = dynamic_cast<wxBoxSizer*>(GetSizer());

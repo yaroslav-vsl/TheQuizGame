@@ -42,9 +42,12 @@ public:
     };
     std::vector<bool> answered_question;
     std::vector<Question> questions;
+
     int GetCorrectAnswersCount() const { return m_correctAnswersCount; }
     int GetTotalQuestions() const { return questions.size(); }
     bool IsQuestionAnswered(int index) const;
+    int GetCountQuestionAnswere();
+    bool IsQuestion5Answered();
 
 private:
     FractalType m_fractalType;

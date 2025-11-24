@@ -145,8 +145,8 @@ QuestionPanel::QuestionPanel(wxWindow* parent, MainFrame* mainFrame, int questio
     : ImagePanel(parent, L"question_background.jpg"), mainFrame(mainFrame), questionIndex(questionIndex),
     timeElapsed(0), hintTimer(nullptr), hintButton(nullptr), timerLabel(nullptr)
 {
-    wxSize sizeImg = mainFrame->GetSize();
-    this->SetSize(sizeImg);
+    wxSize sizeframe = mainFrame->GetSize();
+    this->SetSize(sizeframe);
     this->LoadFromFile(L"background.jpg");
 
     // Если фоновая картинка не загрузилась, устанавливаем цвет фона
@@ -167,7 +167,7 @@ QuestionPanel::QuestionPanel(wxWindow* parent, MainFrame* mainFrame, int questio
     // ВЕРХНЯЯ ЧАСТЬ - для игрока сверху (текст нормальный)
     wxBoxSizer* topSizer = new wxBoxSizer(wxHORIZONTAL);
     questionTextTop = new RotatedText(this, questionStr, 180.0);
-    questionTextTop->SetMinSize(wxSize(700, 100));
+    questionTextTop->SetMinSize(wxSize(sizeframe.x / 2, 100));
     questionTextTop->SetFonts(wxFont(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
     topSizer->AddStretchSpacer();
     topSizer->Add(questionTextTop, 0, wxALIGN_CENTER);
@@ -179,7 +179,7 @@ QuestionPanel::QuestionPanel(wxWindow* parent, MainFrame* mainFrame, int questio
 
     // ЛЕВАЯ ЧАСТЬ - для игрока слева (текст повернут на 90° против часовой)
     questionTextLeft = new RotatedText(this, questionStr, 90.0);
-    questionTextLeft->SetMinSize(wxSize(100, 700));
+    questionTextLeft->SetMinSize(wxSize(100, sizeframe.y / 1.5));
     questionTextLeft->SetFonts(wxFont(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
     middleSizer->Add(questionTextLeft, 1, wxEXPAND | wxALIGN_CENTER_VERTICAL);
 
@@ -198,7 +198,7 @@ QuestionPanel::QuestionPanel(wxWindow* parent, MainFrame* mainFrame, int questio
     for (int i = 0; i < 4; i++) {
         wxString answerText(question.answers[i]);
         answerButtons[i] = new wxButton(this, wxID_ANY, answerText,
-            wxDefaultPosition, wxSize(350, 60));
+            wxDefaultPosition, wxSize(sizeframe.x / 4, 60));
         answerButtons[i]->SetFont(wxFont(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
         answerButtons[i]->SetBackgroundColour(wxColour(100, 150, 200));
         answerButtons[i]->SetForegroundColour(*wxWHITE);
@@ -233,7 +233,7 @@ QuestionPanel::QuestionPanel(wxWindow* parent, MainFrame* mainFrame, int questio
 
     // ПРАВАЯ ЧАСТЬ - для игрока справа (текст повернут на 90° по часовой)
     questionTextRight = new RotatedText(this, questionStr, -90.0);
-    questionTextRight->SetMinSize(wxSize(100, 700));
+    questionTextRight->SetMinSize(wxSize(100, sizeframe.y / 1.5));
     questionTextRight->SetFonts(wxFont(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
     middleSizer->Add(questionTextRight, 1, wxEXPAND | wxALIGN_CENTER_VERTICAL);
 
@@ -242,7 +242,7 @@ QuestionPanel::QuestionPanel(wxWindow* parent, MainFrame* mainFrame, int questio
     // НИЖНЯЯ ЧАСТЬ - для игрока снизу (текст перевернут на 180°)
     wxBoxSizer* bottomSizer = new wxBoxSizer(wxHORIZONTAL);
     questionTextBottom = new RotatedText(this, questionStr, 0.0);
-    questionTextBottom->SetMinSize(wxSize(700, 100));
+    questionTextBottom->SetMinSize(wxSize(sizeframe.x / 2, 100));
     questionTextBottom->SetFonts(wxFont(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
 
     bottomSizer->AddStretchSpacer();
@@ -319,42 +319,6 @@ void QuestionPanel::ShowHint()
 
     // Разные типы подсказок в зависимости от вопроса
     wxString hint;
-
-    // Определяем тип подсказки на основе вопроса
-    //wxString questionText = question.question;
-    //questionText.MakeLower();
-
-    //if (questionText.Contains("столица") || questionText.Contains("город")) {
-    //    hint = "💡 Подсказка: Это европейский город";
-    //}
-    //else if (questionText.Contains("планета") || questionText.Contains("солнеч")) {
-    //    hint = "💡 Подсказка: Эта планета имеет кольца";
-    //}
-    //else if (questionText.Contains("сколько") || questionText.Contains("число")) {
-    //    // Для числовых вопросов показываем диапазон
-    //    int correct = question.correct;
-    //    wxString correctAnswer = question.answers[correct];
-
-    //    // Пытаемся извлечь число из правильного ответа
-    //    int number;
-    //    if (correctAnswer.ToInt(&number)) {
-    //        int min = std::max(1, number - 2);
-    //        int max = number + 2;
-    //        hint = wxString::Format("💡 Подсказка: Число между %d и %d", min, max);
-    //    }
-    //    else {
-    //        hint = "💡 Подсказка: Правильный ответ находится в середине списка";
-    //    }
-    //}
-    //else if (questionText.Contains("формула") || questionText.Contains("химич")) {
-    //    hint = "💡 Подсказка: Содержит атомы водорода";
-    //}
-    //else {
-    //    // Общая подсказка - исключаем один неправильный ответ
-    //    int wrongToRemove = (question.correct + 1) % 4; // Убираем следующий за правильным ответ
-    //    hint = wxString::Format("💡 Подсказка: Ответ '%s' точно неправильный",
-    //        question.answers[wrongToRemove]);
-    //}
 
     hint = question.hint;//wxString::Format("%d", question.hint);
     wxMessageBox(hint, "Подсказка", wxOK | wxICON_INFORMATION);
