@@ -43,6 +43,7 @@ private:
     double m_rotationZ;
     double m_scale;
     Point3D m_center;
+    double m_rotationY_scale;
 
     // Вершины базового тетраэдра
     Point3D m_baseVertices[4];

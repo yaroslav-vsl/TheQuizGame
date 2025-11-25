@@ -65,6 +65,10 @@ private:
     VideoPanel* videoPanel;
     bool isVideoPanelShown;
     bool question_5_answered;
+    wxSize size_button;
+    wxSize size_button_video;
+    double radius_scale;
+    wxFont font_button;
 
     void OnCellClick(wxCommandEvent& event);
     void OnSize(wxSizeEvent& event);

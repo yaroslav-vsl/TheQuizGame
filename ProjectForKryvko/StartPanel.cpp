@@ -16,12 +16,6 @@ StartPanel::StartPanel(wxWindow* parent, MainFrame* mainFrame)
 
     wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
 
-    //wxBitmap roundBitmap = CreateRoundButton("бвРав", wxColour(255, 0, 0));
-    //startButton = new wxBitmapButton(this, wxID_ANY, roundBitmap, wxDefaultPosition, wxSize(300, 300));
-    //sizer->AddStretchSpacer();
-    //sizer->Add(startButton, 0, wxALIGN_CENTER | wxALIGN_CENTER_VERTICAL);
-    //sizer->AddStretchSpacer();
-
     MyButton* startButton = new MyButton(this, wxID_ANY, wxPoint(100, 100), wxSize(300, 300));
     sizer->AddStretchSpacer();
     sizer->Add(startButton, 0, wxALIGN_CENTER | wxALIGN_CENTER_VERTICAL);
@@ -67,8 +61,3 @@ void StartPanel::OnStartButtonClick(wxMouseEvent &event)
 {
     mainFrame->StartGame();
 }
-
-//void StartPanel::OnStartButtonClick(wxCommandEvent &event)
-//{
-//    mainFrame->StartGame();
-//}

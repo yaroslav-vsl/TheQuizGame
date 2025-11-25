@@ -46,9 +46,6 @@ void ImagePanel::Init(const std::wstring& path_, const wxImage& image)
 {
 	if (image.IsOk())
 	{
-		//const auto width = this->GetSize().GetX();
-		//const auto height = this->GetSize().GetY();
-
 		bitmap = new wxBitmap(image.Scale(width, height, wxIMAGE_QUALITY_HIGH));
 		m_hasBackground = true;
 	}

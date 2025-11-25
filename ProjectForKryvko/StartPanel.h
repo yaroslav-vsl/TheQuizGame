@@ -13,6 +13,5 @@ private:
     wxBitmapButton* startButton;
 
     void OnStartButtonClick(wxMouseEvent &event);
-    //void OnStartButtonClick(wxCommandEvent &event);
     wxBitmap CreateRoundButton(const wxString& text, const wxColour& color);
 };

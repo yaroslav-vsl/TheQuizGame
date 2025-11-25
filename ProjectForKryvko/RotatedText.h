@@ -1,63 +1,3 @@
-//#pragma once
-//#include <wx/wx.h>
-//#include <wx/graphics.h>
-//
-//#include <memory>
-//
-//class RotatedText : public wxWindow
-//{
-//public:
-//    RotatedText(wxWindow* parent, const wxString& text, double angle)
-//        : wxWindow(),
-//        m_text(text), m_angle(angle)
-//    {
-//        SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
-//        wxWindow::Create(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, wxPanelNameStr);
-//
-//#if defined(__WXMSW__)
-//        int extendedStyle = GetWindowLong(GetHWND(), GWL_EXSTYLE);
-//        SetWindowLong(GetHWND(), GWL_EXSTYLE, extendedStyle | WS_EX_TRANSPARENT);
-//#endif
-//
-//        this->Bind(wxEVT_PAINT, &RotatedText::OnPaint, this);
-//    }
-//
-//    wxString m_text;
-//    double m_angle;
-//
-//    void OnPaint(wxPaintEvent& event)
-//    {
-//        wxPaintDC dc(this);
-//
-//        std::unique_ptr<wxGraphicsContext> gc{ wxGraphicsContext::Create(dc) };
-//
-//        if (gc)
-//        {
-//            DrawOnContext(*gc);
-//        }
-//    }
-//
-//
-//    void DrawOnContext(wxGraphicsContext& gc)
-//    {
-//        wxSize size = GetClientSize();
-//
-//        wxColor color{ "#EA3B2D" };
-//
-//        gc.SetBrush(wxBrush(color));
-//        gc.Translate(size.GetWidth() / 2, size.GetHeight() / 2);
-//        gc.Rotate(m_angle * (M_PI / 180.0));
-//        //wxFont font(wxFontInfo({ 0, size.GetHeight() / 2 }).FaceName("Arial"));
-//        wxFont font(6, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
-//        gc.SetFont(font, *wxWHITE);
-//
-//        double textWidth, textHeight;
-//        gc.GetTextExtent(m_text, &textWidth, &textHeight);
-//
-//        gc.DrawText(m_text, -textWidth / 2, -textHeight / 2);
-//    }
-//};
-
 #pragma once
 #include <wx/wx.h>
 #include <wx/graphics.h>
@@ -280,15 +220,7 @@ private:
         // Разбиваем текст на строки если нужно
         if (m_wrappedLines.empty())
         {
-            // Для углов 90 и 270 градусов разбиваем на символы (вертикальный текст)
-            //if (std::abs(std::fmod(m_angle, 180)) == 90)
-            //{
-                //m_wrappedLines = SplitToCharacters(m_text);
-            //}
-            //else
-            //{
-                m_wrappedLines = WrapText(gc, m_text);
-            //}
+            m_wrappedLines = WrapText(gc, m_text);
         }
 
         if (m_wrappedLines.empty())

@@ -12,7 +12,7 @@ wxEND_EVENT_TABLE()
 
 DragonCurvePanel::DragonCurvePanel(wxWindow* parent, MainFrame* mainFrame)
     : FractalBase(parent, mainFrame),
-    m_currentIteration(9),
+    m_currentIteration(0),
     m_timer(nullptr),
     m_progressLabel(nullptr),
     m_animationComplete(false),
@@ -47,7 +47,6 @@ DragonCurvePanel::DragonCurvePanel(wxWindow* parent, MainFrame* mainFrame)
     }
 
     // Создаем головы драконов
-    CreateDragonHeads();
 
     // Генерируем базовые кривые
     GenerateMultiDragon();
@@ -59,34 +58,12 @@ DragonCurvePanel::~DragonCurvePanel()
     StopAnimation();
 }
 
-void DragonCurvePanel::CreateDragonHeads()
-{
-    wxSize size = GetClientSize();
-    int centerX = size.GetWidth() / 2;
-    int centerY = size.GetHeight() / 2;
-    int radius = std::min(size.GetWidth(), size.GetHeight()) / 3;
-
-    // Создаем 6 голов дракона по кругу
-    m_dragonHeads.clear();
-    m_headAngles.clear();
-
-    int numHeads = 6 + m_currentIteration; // Количество голов увеличивается с итерациями
-
-    for (int i = 0; i < numHeads; i++) {
-        double angle = 2.0 * M_PI * i / numHeads;
-        int x = centerX + radius * cos(angle);
-        int y = centerY + radius * sin(angle);
-        m_dragonHeads.push_back(wxPoint(x, y));
-        m_headAngles.push_back(angle);
-    }
-}
-
 void DragonCurvePanel::StartAnimation()
 {
-//    if (!m_timer && m_currentIteration < m_maxIterations) {
+    if (!m_timer && m_currentIteration < m_maxIterations) {
         m_timer = new wxTimer(this, wxID_ANY);
         m_timer->Start(300); // Анимация для плавного движения
- //   }
+    }
 }
 
 void DragonCurvePanel::StopAnimation()
@@ -107,7 +84,7 @@ void DragonCurvePanel::OnPaint(wxPaintEvent& event)
 
 void DragonCurvePanel::OnTimer(wxTimerEvent& event)
 {
-   //if (m_currentIteration < m_maxIterations) {
+   if (m_currentIteration < m_maxIterations) {
         m_currentIteration++;
 
         // Обновляем анимацию
@@ -117,7 +94,6 @@ void DragonCurvePanel::OnTimer(wxTimerEvent& event)
         }
 
         // Создаем новые головы для следующей итерации
-        CreateDragonHeads();
         GenerateMultiDragon();
         UpdateProgressLabel();
         Refresh();
@@ -127,7 +103,7 @@ void DragonCurvePanel::OnTimer(wxTimerEvent& event)
             StopAnimation();
             UpdateProgressLabel();
         }
-    //}
+    }
 }
 
 void DragonCurvePanel::DrawDragonCurve(wxDC& dc)
@@ -181,67 +157,7 @@ void DragonCurvePanel::DrawDragonCurve(wxDC& dc)
 
             dc.DrawLine(tail[i], tail[i + 1]);
         }
-
-        //// Рисуем голову дракона
-        //if (!m_dragonHeads.empty() && tailIndex < m_dragonHeads.size()) {
-            wxPoint head = m_dragonHeads[tailIndex];
-
-            // Анимированная голова дракона
-            int headSize = 8 + static_cast<int>(3 * sin(m_animationPhase * 2 + tailIndex));
-
-            if (m_animationComplete && mainFrame->GetCorrectAnswersCount() >= mainFrame->GetTotalQuestions()) {
-                dc.SetBrush(wxBrush(wxColour(255, 100, 100)));
-                dc.SetPen(wxPen(wxColour(255, 50, 50), 2));
-            }
-            else {
-                dc.SetBrush(wxBrush(wxColour(200, 50, 50)));
-                dc.SetPen(wxPen(wxColour(150, 30, 30), 2));
-            }
-
-            dc.DrawCircle(head, headSize);
-
-            // Глаз дракона
-            dc.SetBrush(wxBrush(wxColour(255, 255, 0)));
-            dc.SetPen(wxPen(wxColour(200, 200, 0), 1));
-
-            // Глаз смотрит в направлении кривой
-            wxPoint eyeOffset;
-            if (tail.size() > 2) {
-                wxPoint dir(tail[tail.size() - 2].x - head.x, tail[tail.size() - 2].y - head.y);
-                double length = sqrt(dir.x * dir.x + dir.y * dir.y);
-                if (length > 0) {
-                    eyeOffset.x = static_cast<int>((dir.x / length) * (headSize / 2));
-                    eyeOffset.y = static_cast<int>((dir.y / length) * (headSize / 2));
-                }
-            }
-            dc.DrawCircle(head.x + eyeOffset.x, head.y + eyeOffset.y, headSize / 3);
-        //}
     }
-
-    //if (m_animationComplete && mainFrame->GetCorrectAnswersCount() >= mainFrame->GetTotalQuestions()) {
-        // Добавляем огненные частицы
-        //dc.SetBrush(wxBrush(wxColour(255, 200, 100, 128)));
-        //dc.SetPen(wxPen(wxColour(255, 150, 50, 128), 1));
-
-        //std::random_device rd;
-        //std::mt19937 gen(rd());
-        //std::uniform_int_distribution<> dis(0, width);
-        //std::uniform_int_distribution<> disY(0, height);
-
-        //for (int i = 0; i < 20; i++) {
-        //    int x = dis(gen);
-        //    int y = disY(gen);
-        //    int size = 2 + static_cast<int>(3 * sin(m_animationPhase * 3 + i));
-        //    dc.DrawCircle(x, y, size);
-        //}
-
-        //// Добавляем заголовок
-        //dc.SetTextForeground(wxColour(255, 255, 255));
-        //dc.SetFont(wxFont(20, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
-        //wxString title = "МНОГОГОЛОВЫЙ ДРАКОН";
-        //wxSize textSize = dc.GetTextExtent(title);
-        //dc.DrawText(title, width / 2 - textSize.GetWidth() / 2, 20);
-    //}
 }
 
 void DragonCurvePanel::GenerateMultiDragon()
@@ -252,12 +168,19 @@ void DragonCurvePanel::GenerateMultiDragon()
     int centerX = size.GetWidth() / 2;
     int centerY = (size.GetHeight() + 100) / 2;
 
+    double scale = 0.75;
+
+    if (size.GetWidth() > 2000)
+    {
+        scale = 2;
+    }
+
     // Создаем несколько драконьих хвостов, исходящих из центра
     int numTails = 3 + m_currentIteration; // Количество хвостов увеличивается с итерациями
 
     for (int i = 0; i < numTails; i++) {
         double angle = 2.0 * M_PI * i / numTails + m_animationPhase * 0.1;
-        int tailLength = 100 + m_currentIteration * 30;
+        int tailLength = 100 * scale + m_currentIteration * 30 * scale;
 
         wxPoint start(centerX, centerY);
         wxPoint end(
@@ -332,30 +255,21 @@ void DragonCurvePanel::UpdateProgressLabel()
             progressText = wxString::Format("МНОГОГОЛОВЫЙ ДРАКОН - ЗАВЕРШЕН!\n"
                 "Все %d вопросов отвечены правильно!\n"
                 "Итерация: %d/%d\n",
-                //"Хвостов: %zu\n"
-                //"Голов: %zu",
                 totalQuestions, m_currentIteration, m_maxIterations);
-                //m_dragonTails.size(), m_dragonHeads.size());
         }
         else if (m_animationComplete) {
             progressText = wxString::Format("Многоголовый Дракон - Построен!\n"
                 "Правильных ответов: %d/%d\n"
                 "Итерация: %d/%d\n",
-                //"Хвостов: %zu\n"
-                //"Голов: %zu",
                 correctAnswers, totalQuestions,
                 m_currentIteration, m_maxIterations);
-                //m_dragonTails.size(), m_dragonHeads.size());
         }
         else {
             progressText = wxString::Format("Многоголовый Дракон - Построение...\n"
                 "Правильных ответов: %d/%d\n"
                 "Итерация: %d/%d\n",
-                //"Хвостов: %zu\n"
-                //"Голов: %zu",
                 correctAnswers, totalQuestions,
                 m_currentIteration + 1, m_maxIterations);
-                //m_dragonTails.size(), m_dragonHeads.size());
         }
 
         m_progressLabel->SetLabel(progressText);

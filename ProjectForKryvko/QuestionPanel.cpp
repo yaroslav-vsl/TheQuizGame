@@ -164,10 +164,14 @@ QuestionPanel::QuestionPanel(wxWindow* parent, MainFrame* mainFrame, int questio
     // Создаем основной сайзер
     wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
     wxFont font_rotated = wxFont(18, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
+    wxFont font_question = wxFont(15, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
+    wxFont font_hint = wxFont(12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
 
     if (sizeframe.x > 2000)
     {
         font_rotated = wxFont(32, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
+        font_question = wxFont(25, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
+        font_hint = wxFont(20, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
     }
     else
     {
@@ -217,7 +221,7 @@ QuestionPanel::QuestionPanel(wxWindow* parent, MainFrame* mainFrame, int questio
         wxString answerText(question.answers[i]);
         answerButtons[i] = new wxButton(this, wxID_ANY, answerText,
             wxDefaultPosition, wxSize(sizeframe.x / 4, 80));
-        answerButtons[i]->SetFont(wxFont(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
+        answerButtons[i]->SetFont(font_question);
         answerButtons[i]->SetBackgroundColour(wxColour(100, 150, 200));
         answerButtons[i]->SetForegroundColour(*wxWHITE);
         centerSizer->Add(answerButtons[i], 0, wxALIGN_CENTER | wxALL, 8);
@@ -230,13 +234,13 @@ QuestionPanel::QuestionPanel(wxWindow* parent, MainFrame* mainFrame, int questio
 
     // Метка таймера
     timerLabel = new wxStaticText(this, wxID_ANY, "Подсказка через: 60 сек");
-    timerLabel->SetFont(wxFont(12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+    timerLabel->SetFont(font_hint);
     timerLabel->SetForegroundColour(wxColour(150, 150, 150));
     hintSizer->Add(timerLabel, 0, wxALIGN_CENTER | wxRIGHT, 10);
 
     // Кнопка подсказки
     hintButton = new wxButton(this, wxID_ANY, "Подсказка");
-    hintButton->SetFont(wxFont(12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+    hintButton->SetFont(font_hint);
     hintButton->SetBackgroundColour(wxColour(200, 200, 200)); // Серый - неактивная
     hintButton->SetForegroundColour(wxColour(100, 100, 100));
     hintButton->Enable(false); // Изначально неактивна

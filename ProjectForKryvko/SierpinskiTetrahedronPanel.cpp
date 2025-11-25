@@ -19,8 +19,17 @@ SierpinskiTetrahedronPanel::SierpinskiTetrahedronPanel(wxWindow* parent, MainFra
     m_rotationX(0.0),
     m_rotationY(0.0),
     m_rotationZ(0.0),
-    m_scale(1.0)
+    m_scale(2.0),
+    m_rotationY_scale(0.02)
 {
+    wxSize size_frame = mainFrame->GetSize();
+
+    if (size_frame.x > 2000)
+    {
+        m_scale = 4.0;
+        m_rotationY_scale = 0.05;
+    }
+
     // Создаем общий UI
     CreateCommonUI();
 
@@ -31,15 +40,13 @@ SierpinskiTetrahedronPanel::SierpinskiTetrahedronPanel(wxWindow* parent, MainFra
     m_maxIterations = 0; // Начинаем с 0
     if (correctAnswers >= 1) m_maxIterations = 1;
     if (correctAnswers >= 3) m_maxIterations = 2;
-    if (correctAnswers >= 5) m_maxIterations = 3;
-    if (correctAnswers >= 7) m_maxIterations = 4;
-    if (correctAnswers >= 9) m_maxIterations = 5;
-    if (correctAnswers >= 11) m_maxIterations = 6;
-    if (correctAnswers >= 13) m_maxIterations = 7;
-    if (correctAnswers >= 15) m_maxIterations = 7;
+    if (correctAnswers >= 7) m_maxIterations = 3;
+    if (correctAnswers >= 10) m_maxIterations = 4;
+    if (correctAnswers >= 13) m_maxIterations = 5;
+    if (correctAnswers >= 16) m_maxIterations = 6;
 
     // Инициализируем вершины базового тетраэдра
-    double size = 0.8;
+    double size = 0.9;
     m_baseVertices[0] = Point3D(0.0, -size, 0.0);  // Верхняя вершина
     m_baseVertices[1] = Point3D(-size, size, -size); // Левая нижняя
     m_baseVertices[2] = Point3D(size, size, -size);  // Правая нижняя
@@ -116,15 +123,15 @@ void SierpinskiTetrahedronPanel::OnIdle(wxIdleEvent& event)
 void SierpinskiTetrahedronPanel::RotateTetrahedron()
 {
     // Медленное вращение для демонстрации 3D
-    m_rotationY += 0.01;
-    m_rotationX += 0.005;
+    m_rotationY += m_rotationY_scale;
+    //m_rotationX += 0.005;
 }
 
 void SierpinskiTetrahedronPanel::DrawSierpinskiTetrahedron(wxDC& dc)
 {
     wxSize size = GetClientSize();
     int width = size.GetWidth();
-    int height = size.GetHeight() - 100;
+    int height = size.GetHeight() - 200;
 
     if (m_currentIteration == 0 && !m_animationComplete) {
         dc.SetTextForeground(wxColour(255, 255, 255));
@@ -221,7 +228,7 @@ void SierpinskiTetrahedronPanel::Project3DTo2D(const Point3D& point3D, wxPoint& 
 {
     wxSize size = GetClientSize();
     int centerX = size.GetWidth() / 2;
-    int centerY = (size.GetHeight() - 100) / 2;
+    int centerY = (size.GetHeight() - 200) / 2;
 
     // Применяем вращения
     double x = point3D.x;
