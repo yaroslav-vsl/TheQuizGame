@@ -15,6 +15,8 @@ wxEND_EVENT_TABLE()
 FractalPanel::FractalPanel(wxWindow* parent, MainFrame* mainFrame)
     : wxPanel(parent), mainFrame(mainFrame), m_currentFractal(nullptr)
 {
+    wxSize sizeframe = mainFrame->GetSize();
+    wxSize size_for_panel = wxSize(sizeframe.x / 1.3, sizeframe.y * 0.75);
     SetBackgroundColour(*wxBLACK);
 
     wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
@@ -38,7 +40,7 @@ FractalPanel::FractalPanel(wxWindow* parent, MainFrame* mainFrame)
     // Создаем контейнер для фрактала с правильным сайзером
     m_fractalContainer = new wxPanel(this);
     m_fractalContainer->SetBackgroundColour(*wxBLACK);
-    m_fractalContainer->SetMinSize(wxSize(600, 400));
+    m_fractalContainer->SetMinSize(size_for_panel);
 
     // Важно: создаем сайзер для контейнера
     wxBoxSizer* containerSizer = new wxBoxSizer(wxVERTICAL);
@@ -48,7 +50,7 @@ FractalPanel::FractalPanel(wxWindow* parent, MainFrame* mainFrame)
 
     // Кнопка возврата
     wxButton* returnButton = new wxButton(this, wxID_ANY, "Вернуться на игровое поле", wxDefaultPosition, wxSize(300, 60));
-    returnButton->SetFont(wxFont(12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+    returnButton->SetFont(wxFont(15, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
     returnButton->SetBackgroundColour(wxColour(100, 200, 100));
     returnButton->Bind(wxEVT_BUTTON, &FractalPanel::OnReturnButtonClick, this);
 

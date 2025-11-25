@@ -145,7 +145,7 @@ QuestionPanel::QuestionPanel(wxWindow* parent, MainFrame* mainFrame, int questio
     : ImagePanel(parent, L"question_background.jpg"), mainFrame(mainFrame), questionIndex(questionIndex),
     timeElapsed(0), hintTimer(nullptr), hintButton(nullptr), timerLabel(nullptr)
 {
-    wxSize sizeframe = mainFrame->GetSize();
+    sizeframe = mainFrame->GetSize();
     this->SetSize(sizeframe);
     this->LoadFromFile(L"background.jpg");
 
@@ -163,12 +163,29 @@ QuestionPanel::QuestionPanel(wxWindow* parent, MainFrame* mainFrame, int questio
 
     // Создаем основной сайзер
     wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
+    wxFont font_rotated = wxFont(18, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
+
+    if (sizeframe.x > 2000)
+    {
+        font_rotated = wxFont(32, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
+    }
+    else
+    {
+        
+    }
+
+    wxSize min_top_bottom = wxSize(sizeframe.x / 2, sizeframe.y / 5.5);
+    wxSize min_left_right = wxSize(sizeframe.x / 5.5, sizeframe.y / 1.6);
+    int length_top_bottom = sizeframe.x / 2;
+    int length_left_right = sizeframe.y / 1.6;
+    int count_lines = 7;
 
     // ВЕРХНЯЯ ЧАСТЬ - для игрока сверху (текст нормальный)
     wxBoxSizer* topSizer = new wxBoxSizer(wxHORIZONTAL);
-    questionTextTop = new RotatedText(this, questionStr, 180.0);
-    questionTextTop->SetMinSize(wxSize(sizeframe.x / 2, 100));
-    questionTextTop->SetFonts(wxFont(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+    questionTextTop = new RotatedText(this, questionStr, 180.0, count_lines, length_top_bottom);
+    questionTextTop->SetMinSize(min_top_bottom);
+    //questionTextTop->SetFonts(wxFont(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+    questionTextTop->SetFonts(font_rotated);
     topSizer->AddStretchSpacer();
     topSizer->Add(questionTextTop, 0, wxALIGN_CENTER);
     topSizer->AddStretchSpacer();
@@ -178,9 +195,10 @@ QuestionPanel::QuestionPanel(wxWindow* parent, MainFrame* mainFrame, int questio
     wxBoxSizer* middleSizer = new wxBoxSizer(wxHORIZONTAL);
 
     // ЛЕВАЯ ЧАСТЬ - для игрока слева (текст повернут на 90° против часовой)
-    questionTextLeft = new RotatedText(this, questionStr, 90.0);
-    questionTextLeft->SetMinSize(wxSize(100, sizeframe.y / 1.5));
-    questionTextLeft->SetFonts(wxFont(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+    questionTextLeft = new RotatedText(this, questionStr, 90.0, count_lines, length_left_right);
+    questionTextLeft->SetMinSize(min_left_right);
+    //questionTextLeft->SetFonts(wxFont(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+    questionTextLeft->SetFonts(font_rotated);
     middleSizer->Add(questionTextLeft, 1, wxEXPAND | wxALIGN_CENTER_VERTICAL);
 
     middleSizer->AddStretchSpacer();
@@ -198,7 +216,7 @@ QuestionPanel::QuestionPanel(wxWindow* parent, MainFrame* mainFrame, int questio
     for (int i = 0; i < 4; i++) {
         wxString answerText(question.answers[i]);
         answerButtons[i] = new wxButton(this, wxID_ANY, answerText,
-            wxDefaultPosition, wxSize(sizeframe.x / 4, 60));
+            wxDefaultPosition, wxSize(sizeframe.x / 4, 80));
         answerButtons[i]->SetFont(wxFont(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
         answerButtons[i]->SetBackgroundColour(wxColour(100, 150, 200));
         answerButtons[i]->SetForegroundColour(*wxWHITE);
@@ -232,18 +250,20 @@ QuestionPanel::QuestionPanel(wxWindow* parent, MainFrame* mainFrame, int questio
     middleSizer->AddStretchSpacer();
 
     // ПРАВАЯ ЧАСТЬ - для игрока справа (текст повернут на 90° по часовой)
-    questionTextRight = new RotatedText(this, questionStr, -90.0);
-    questionTextRight->SetMinSize(wxSize(100, sizeframe.y / 1.5));
-    questionTextRight->SetFonts(wxFont(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+    questionTextRight = new RotatedText(this, questionStr, -90.0, count_lines, length_left_right);
+    questionTextRight->SetMinSize(min_left_right);
+    //questionTextRight->SetFonts(wxFont(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+    questionTextRight->SetFonts(font_rotated);
     middleSizer->Add(questionTextRight, 1, wxEXPAND | wxALIGN_CENTER_VERTICAL);
 
     mainSizer->Add(middleSizer, 3, wxEXPAND);
 
     // НИЖНЯЯ ЧАСТЬ - для игрока снизу (текст перевернут на 180°)
     wxBoxSizer* bottomSizer = new wxBoxSizer(wxHORIZONTAL);
-    questionTextBottom = new RotatedText(this, questionStr, 0.0);
-    questionTextBottom->SetMinSize(wxSize(sizeframe.x / 2, 100));
-    questionTextBottom->SetFonts(wxFont(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+    questionTextBottom = new RotatedText(this, questionStr, 0.0, count_lines, length_top_bottom);
+    questionTextBottom->SetMinSize(min_top_bottom);
+    //questionTextBottom->SetFonts(wxFont(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+    questionTextBottom->SetFonts(font_rotated);
 
     bottomSizer->AddStretchSpacer();
     bottomSizer->Add(questionTextBottom, 0, wxALIGN_CENTER);

@@ -40,6 +40,7 @@ public:
 private:
     MainFrame* mainFrame;
     int questionIndex;
+    wxSize sizeframe;
 
     // Тексты вопросов для 4 сторон
     RotatedText* questionTextTop;
