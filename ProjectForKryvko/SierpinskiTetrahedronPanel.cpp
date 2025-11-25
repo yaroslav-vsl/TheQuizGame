@@ -29,13 +29,14 @@ SierpinskiTetrahedronPanel::SierpinskiTetrahedronPanel(wxWindow* parent, MainFra
 
     // 8 стадий сложности (от 0 до 7 итераций)
     m_maxIterations = 0; // Начинаем с 0
-    if (correctAnswers >= 2) m_maxIterations = 1;
-    if (correctAnswers >= 4) m_maxIterations = 2;
-    if (correctAnswers >= 6) m_maxIterations = 3;
-    if (correctAnswers >= 8) m_maxIterations = 4;
-    if (correctAnswers >= 10) m_maxIterations = 5;
-    if (correctAnswers >= 12) m_maxIterations = 6;
-    if (correctAnswers >= 14) m_maxIterations = 7;
+    if (correctAnswers >= 1) m_maxIterations = 1;
+    if (correctAnswers >= 3) m_maxIterations = 2;
+    if (correctAnswers >= 5) m_maxIterations = 3;
+    if (correctAnswers >= 7) m_maxIterations = 4;
+    if (correctAnswers >= 9) m_maxIterations = 5;
+    if (correctAnswers >= 11) m_maxIterations = 6;
+    if (correctAnswers >= 13) m_maxIterations = 7;
+    if (correctAnswers >= 15) m_maxIterations = 7;
 
     // Инициализируем вершины базового тетраэдра
     double size = 0.8;

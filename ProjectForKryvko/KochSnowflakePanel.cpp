@@ -24,14 +24,15 @@ KochSnowflakePanel::KochSnowflakePanel(wxWindow* parent, MainFrame* mainFrame)
     int totalQuestions = mainFrame->GetTotalQuestions();
 
     m_maxIterations = 0; // Начинаем с 0
-    if (correctAnswers >= 2) m_maxIterations = 1;
-    if (correctAnswers >= 4) m_maxIterations = 2;
-    if (correctAnswers >= 6) m_maxIterations = 3;
-    if (correctAnswers >= 8) m_maxIterations = 4;
-    if (correctAnswers >= 10) m_maxIterations = 5;
-    if (correctAnswers >= 12) m_maxIterations = 6;
-    if (correctAnswers >= 14) m_maxIterations = 7;
-    if (correctAnswers >= 16) m_maxIterations = 10;
+    if (correctAnswers >= 1) m_maxIterations = 1;
+    if (correctAnswers >= 2) m_maxIterations = 2;
+    if (correctAnswers >= 4) m_maxIterations = 3;
+    if (correctAnswers >= 6) m_maxIterations = 4;
+    if (correctAnswers >= 8) m_maxIterations = 5;
+    if (correctAnswers >= 10) m_maxIterations = 6;
+    if (correctAnswers >= 12) m_maxIterations = 7;
+    if (correctAnswers >= 14) m_maxIterations = 8;
+    if (correctAnswers >= 16) m_maxIterations = 9;
 
     // Создаем прогресс-лейбл
     wxBoxSizer* mainSizer = dynamic_cast<wxBoxSizer*>(GetSizer());
@@ -79,14 +80,16 @@ void KochSnowflakePanel::OnPaint(wxPaintEvent& event)
 
 void KochSnowflakePanel::OnTimer(wxTimerEvent& event)
 {
-    if (m_currentIteration < m_maxIterations) {
+    if (m_currentIteration < m_maxIterations) 
+    {
         m_currentIteration++;
         GenerateKochSnowflake();
         UpdateProgressLabel();
         Refresh();
 
         // Если достигли максимума, останавливаем анимацию
-        if (m_currentIteration >= m_maxIterations) {
+        if (m_currentIteration >= m_maxIterations) 
+        {
             m_animationComplete = true;
             StopAnimation();
             UpdateProgressLabel(); // Обновляем для показа завершающего сообщения
@@ -161,18 +164,6 @@ void KochSnowflakePanel::DrawKochSnowflake(wxDC& dc)
             for (size_t j = 0; j < segment.size() - 1; j++) {
                 dc.DrawLine(segment[j], segment[j + 1]);
             }
-        }
-
-        // Добавляем блестящие точки
-        dc.SetPen(wxPen(wxColour(255, 255, 200)));
-        for (int i = 0; i < 8; i++) {
-            double angle = (2.0 * M_PI * i) / 8.0;
-            int sparkleX = centerX + static_cast<int>(outerSize * 0.8 * cos(angle));
-            int sparkleY = centerY + static_cast<int>(outerSize * 0.8 * sin(angle));
-
-            // Рисуем крестик
-            dc.DrawLine(sparkleX - 3, sparkleY, sparkleX + 3, sparkleY);
-            dc.DrawLine(sparkleX, sparkleY - 3, sparkleX, sparkleY + 3);
         }
     }
 }
@@ -268,18 +259,16 @@ void KochSnowflakePanel::UpdateProgressLabel()
         wxString progressText;
 
         if (m_animationComplete && correctAnswers >= totalQuestions) {
-            progressText = wxString::Format("ЗАВЕРШЕНА! Все %d вопросов отвечены правильно!\nИтерация: %d/%d",
+            progressText = wxString::Format("%s - ЗАВЕРШЕНА!\nВсе %d вопросов отвечены правильно!\nИтерация: %d/%d",
                 GetFractalName(), totalQuestions, m_currentIteration, m_maxIterations);
         }
         else if (m_animationComplete) {
             progressText = wxString::Format("%s - Построена!\nПравильных ответов: %d/%d\nИтерация: %d/%d",
-                GetFractalName(), correctAnswers, totalQuestions,
-                m_currentIteration, m_maxIterations);
+                GetFractalName(), correctAnswers, totalQuestions, m_currentIteration, m_maxIterations);
         }
         else {
             progressText = wxString::Format("%s - Построение...\nПравильных ответов: %d/%d\nИтерация: %d/%d",
-                GetFractalName(), correctAnswers, totalQuestions,
-                m_currentIteration + 1, m_maxIterations);
+                GetFractalName(), correctAnswers, totalQuestions, m_currentIteration + 1, m_maxIterations);
         }
 
         m_progressLabel->SetLabel(progressText);

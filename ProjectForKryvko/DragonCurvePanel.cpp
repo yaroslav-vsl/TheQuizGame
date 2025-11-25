@@ -26,13 +26,15 @@ DragonCurvePanel::DragonCurvePanel(wxWindow* parent, MainFrame* mainFrame)
 
     // 8 стадий сложности (от 0 до 7 итераций)
     m_maxIterations = 0; // Начинаем с 0
-    if (correctAnswers >= 2) m_maxIterations = 1;
-    if (correctAnswers >= 4) m_maxIterations = 2;
-    if (correctAnswers >= 6) m_maxIterations = 3;
-    if (correctAnswers >= 8) m_maxIterations = 4;
-    if (correctAnswers >= 10) m_maxIterations = 5;
-    if (correctAnswers >= 12) m_maxIterations = 6;
-    if (correctAnswers >= 14) m_maxIterations = 7;
+    if (correctAnswers >= 1) m_maxIterations = 1;
+    if (correctAnswers >= 2) m_maxIterations = 2;
+    if (correctAnswers >= 4) m_maxIterations = 3;
+    if (correctAnswers >= 6) m_maxIterations = 4;
+    if (correctAnswers >= 8) m_maxIterations = 5;
+    if (correctAnswers >= 10) m_maxIterations = 6;
+    if (correctAnswers >= 12) m_maxIterations = 7;
+    if (correctAnswers >= 14) m_maxIterations = 8;
+    if (correctAnswers >= 16) m_maxIterations = 9;
 
     // Создаем прогресс-лейбл
     wxBoxSizer* mainSizer = dynamic_cast<wxBoxSizer*>(GetSizer());
@@ -217,30 +219,30 @@ void DragonCurvePanel::DrawDragonCurve(wxDC& dc)
     }
 
     // Декорации для завершенного фрактала
-    if (m_animationComplete && mainFrame->GetCorrectAnswersCount() >= mainFrame->GetTotalQuestions()) {
-        // Добавляем огненные частицы
-        dc.SetBrush(wxBrush(wxColour(255, 200, 100, 128)));
-        dc.SetPen(wxPen(wxColour(255, 150, 50, 128), 1));
+    //if (m_animationComplete && mainFrame->GetCorrectAnswersCount() >= mainFrame->GetTotalQuestions()) {
+    //    // Добавляем огненные частицы
+    //    dc.SetBrush(wxBrush(wxColour(255, 200, 100, 128)));
+    //    dc.SetPen(wxPen(wxColour(255, 150, 50, 128), 1));
 
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_int_distribution<> dis(0, width);
-        std::uniform_int_distribution<> disY(0, height);
+    //    std::random_device rd;
+    //    std::mt19937 gen(rd());
+    //    std::uniform_int_distribution<> dis(0, width);
+    //    std::uniform_int_distribution<> disY(0, height);
 
-        for (int i = 0; i < 20; i++) {
-            int x = dis(gen);
-            int y = disY(gen);
-            int size = 2 + static_cast<int>(3 * sin(m_animationPhase * 3 + i));
-            dc.DrawCircle(x, y, size);
-        }
+    //    for (int i = 0; i < 20; i++) {
+    //        int x = dis(gen);
+    //        int y = disY(gen);
+    //        int size = 2 + static_cast<int>(3 * sin(m_animationPhase * 3 + i));
+    //        dc.DrawCircle(x, y, size);
+    //    }
 
-        // Добавляем заголовок
-        dc.SetTextForeground(wxColour(255, 255, 255));
-        dc.SetFont(wxFont(20, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
-        wxString title = "МНОГОГОЛОВЫЙ ДРАКОН";
-        wxSize textSize = dc.GetTextExtent(title);
-        dc.DrawText(title, width / 2 - textSize.GetWidth() / 2, 20);
-    }
+    //    // Добавляем заголовок
+    //    dc.SetTextForeground(wxColour(255, 255, 255));
+    //    dc.SetFont(wxFont(20, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+    //    wxString title = "МНОГОГОЛОВЫЙ ДРАКОН";
+    //    wxSize textSize = dc.GetTextExtent(title);
+    //    dc.DrawText(title, width / 2 - textSize.GetWidth() / 2, 20);
+    //}
 }
 
 void DragonCurvePanel::GenerateMultiDragon()
@@ -330,31 +332,31 @@ void DragonCurvePanel::UpdateProgressLabel()
         if (m_animationComplete && correctAnswers >= totalQuestions) {
             progressText = wxString::Format("МНОГОГОЛОВЫЙ ДРАКОН - ЗАВЕРШЕН!\n"
                 "Все %d вопросов отвечены правильно!\n"
-                "Итерация: %d/%d\n"
-                "Хвостов: %zu\n"
-                "Голов: %zu",
-                totalQuestions, m_currentIteration, m_maxIterations,
-                m_dragonTails.size(), m_dragonHeads.size());
+                "Итерация: %d/%d\n",
+                //"Хвостов: %zu\n"
+                //"Голов: %zu",
+                totalQuestions, m_currentIteration, m_maxIterations);
+                //m_dragonTails.size(), m_dragonHeads.size());
         }
         else if (m_animationComplete) {
             progressText = wxString::Format("Многоголовый Дракон - Построен!\n"
                 "Правильных ответов: %d/%d\n"
-                "Итерация: %d/%d\n"
-                "Хвостов: %zu\n"
-                "Голов: %zu",
+                "Итерация: %d/%d\n",
+                //"Хвостов: %zu\n"
+                //"Голов: %zu",
                 correctAnswers, totalQuestions,
-                m_currentIteration, m_maxIterations,
-                m_dragonTails.size(), m_dragonHeads.size());
+                m_currentIteration, m_maxIterations);
+                //m_dragonTails.size(), m_dragonHeads.size());
         }
         else {
             progressText = wxString::Format("Многоголовый Дракон - Построение...\n"
                 "Правильных ответов: %d/%d\n"
-                "Итерация: %d/%d\n"
-                "Хвостов: %zu\n"
-                "Голов: %zu",
+                "Итерация: %d/%d\n",
+                //"Хвостов: %zu\n"
+                //"Голов: %zu",
                 correctAnswers, totalQuestions,
-                m_currentIteration + 1, m_maxIterations,
-                m_dragonTails.size(), m_dragonHeads.size());
+                m_currentIteration + 1, m_maxIterations);
+                //m_dragonTails.size(), m_dragonHeads.size());
         }
 
         m_progressLabel->SetLabel(progressText);

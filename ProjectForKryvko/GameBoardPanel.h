@@ -29,7 +29,7 @@ class MainFrame;
 class VideoPanel : public wxPanel
 {
 public:
-    VideoPanel(wxWindow* parent, const wxString& videoFile);
+    VideoPanel(wxWindow* parent, const wxString& videoFile, const wxSize& sizeframe);
     ~VideoPanel();
 
     bool LoadVideo(const wxString& videoFile);

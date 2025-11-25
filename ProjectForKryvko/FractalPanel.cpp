@@ -26,8 +26,7 @@ FractalPanel::FractalPanel(wxWindow* parent, MainFrame* mainFrame)
 
     m_fractalChoice = new wxChoice(this, wxID_ANY);
     m_fractalChoice->Append("Снежинка Коха");
-    m_fractalChoice->Append("Папоротник Барнсли");
-    m_fractalChoice->Append("Мандельброт");
+    //m_fractalChoice->Append("Папоротник Барнсли");
     m_fractalChoice->Append("Треугольник Серпинского");
     m_fractalChoice->Append("Тэтраедр Серпинского");
     m_fractalChoice->Append("Дракон");
@@ -48,7 +47,7 @@ FractalPanel::FractalPanel(wxWindow* parent, MainFrame* mainFrame)
     mainSizer->Add(m_fractalContainer, 1, wxEXPAND | wxALL, 10);
 
     // Кнопка возврата
-    wxButton* returnButton = new wxButton(this, wxID_ANY, "Вернуться на игровое поле");
+    wxButton* returnButton = new wxButton(this, wxID_ANY, "Вернуться на игровое поле", wxDefaultPosition, wxSize(300, 60));
     returnButton->SetFont(wxFont(12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
     returnButton->SetBackgroundColour(wxColour(100, 200, 100));
     returnButton->Bind(wxEVT_BUTTON, &FractalPanel::OnReturnButtonClick, this);
@@ -95,12 +94,6 @@ void FractalPanel::SetFractalType(MainFrame::FractalType type)
         case MainFrame::FRACTAL_KOCH_SNOWFLAKE:
             m_currentFractal = new KochSnowflakePanel(m_fractalContainer, mainFrame);
             break;
-        case MainFrame::FRACTAL_FERN:
-            m_currentFractal = new FernFractalPanel(m_fractalContainer, mainFrame);
-            break;
-        case MainFrame::FRACTAL_MANDELBROT:
-            m_currentFractal = new MandelbrotPanel(m_fractalContainer, mainFrame);
-            break;
         case MainFrame::FRACTAL_TRIANGLE:
             m_currentFractal = new SierpinskiTrianglePanel(m_fractalContainer, mainFrame);
             break;
@@ -144,7 +137,7 @@ void FractalPanel::SetFractalType(MainFrame::FractalType type)
 void FractalPanel::OnFractalChoice(wxCommandEvent& event)
 {
     int selection = event.GetSelection();
-    if (selection >= 0 && selection <= 5) {
+    if (selection >= 0 && selection <= 3) {
         MainFrame::FractalType type = static_cast<MainFrame::FractalType>(selection);
         SetFractalType(type);
     }

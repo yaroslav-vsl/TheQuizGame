@@ -362,7 +362,11 @@ void QuestionPanel::OnAnswerClick(wxCommandEvent& event)
         }
         else
         {
-            mainFrame->ReturnToBoard();
+            if (hintTimer && hintTimer->IsRunning()) {
+                hintTimer->Stop();
+            }
+            mainFrame->ShowFractal();
+            //mainFrame->ReturnToBoard();
         }
     }
     else

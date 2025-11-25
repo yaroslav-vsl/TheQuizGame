@@ -13,11 +13,11 @@ class MainFrame : public wxFrame
 public:
     enum FractalType {
         FRACTAL_KOCH_SNOWFLAKE = 0,
-        FRACTAL_FERN = 1,
-        FRACTAL_MANDELBROT = 2,
-        FRACTAL_TRIANGLE = 3,
-        FRACTAL_TETRAHEDRON = 4,
-        FRACTAL_DRAGON = 5// Добавляем Жюлиа
+        //FRACTAL_FERN = 1,
+        //FRACTAL_MANDELBROT = 2,
+        FRACTAL_TRIANGLE = 1,
+        FRACTAL_TETRAHEDRON = 2,
+        FRACTAL_DRAGON = 3// Добавляем Жюлиа
     };
 
     FractalType GetFractalType() const { return m_fractalType; }

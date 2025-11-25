@@ -187,7 +187,7 @@ EVT_MEDIA_PLAY(ID_MEDIA_CTRL, VideoPanel::OnMediaLoaded)
 EVT_SIZE(VideoPanel::OnSize)
 wxEND_EVENT_TABLE()
 
-VideoPanel::VideoPanel(wxWindow* parent, const wxString& videoFile)
+VideoPanel::VideoPanel(wxWindow* parent, const wxString& videoFile, const wxSize& sizeframe)
     : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE),
     m_loaded(false)
 {
@@ -204,29 +204,29 @@ VideoPanel::VideoPanel(wxWindow* parent, const wxString& videoFile)
 #ifdef __WXMSW__
     // Для Windows пробуем WMP, затем DirectShow
     created = mediaCtrl->Create(this, ID_MEDIA_CTRL, wxEmptyString,
-        wxDefaultPosition, wxSize(800, 600),
+        wxDefaultPosition, wxSize(sizeframe.x / 2, sizeframe.y / 2),
         0, wxMEDIABACKEND_WMP10);
     if (!created) {
         created = mediaCtrl->Create(this, ID_MEDIA_CTRL, wxEmptyString,
-            wxDefaultPosition, wxSize(800, 600),
+            wxDefaultPosition, wxSize(sizeframe.x / 2, sizeframe.y / 2),
             0, wxMEDIABACKEND_DIRECTSHOW);
     }
 #elif defined(__WXGTK__)
     // Для Linux пробуем GStreamer
     created = mediaCtrl->Create(this, ID_MEDIA_CTRL, wxEmptyString,
-        wxDefaultPosition, wxSize(800, 600),
+        wxDefaultPosition, wxSize(sizeframe.x / 2, sizeframe.y / 2),
         0, wxMEDIABACKEND_GSTREAMER);
 #elif defined(__WXMAC__)
     // Для Mac пробуем QuickTime
     created = mediaCtrl->Create(this, ID_MEDIA_CTRL, wxEmptyString,
-        wxDefaultPosition, wxSize(800, 600),
+        wxDefaultPosition, wxSize(sizeframe.x / 2, sizeframe.y / 2),
         0, wxMEDIABACKEND_QUICKTIME);
 #endif
 
     // Если не удалось создать с конкретным бэкендом, пробуем по умолчанию
     if (!created) {
         created = mediaCtrl->Create(this, ID_MEDIA_CTRL, wxEmptyString,
-            wxDefaultPosition, wxSize(800, 600));
+            wxDefaultPosition, wxSize(sizeframe.x / 2, sizeframe.y / 2));
     }
 
     if (!created) {
@@ -235,21 +235,21 @@ VideoPanel::VideoPanel(wxWindow* parent, const wxString& videoFile)
     }
 
     // Текст статуса
-    statusText = new wxStaticText(this, wxID_ANY, "Загрузка видео...");
-    statusText->SetForegroundColour(*wxWHITE);
-    statusText->SetFont(wxFont(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+    //statusText = new wxStaticText(this, wxID_ANY, "Загрузка видео...");
+    //statusText->SetForegroundColour(*wxWHITE);
+    //statusText->SetFont(wxFont(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
 
     // Кнопка закрытия
     closeButton = new wxButton(this, wxID_ANY, "Закрыть видео",
-        wxDefaultPosition, wxSize(120, 40));
-    closeButton->SetFont(wxFont(12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+        wxDefaultPosition, wxSize(200, 60));
+    closeButton->SetFont(wxFont(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
     closeButton->SetBackgroundColour(wxColour(200, 50, 50));
     closeButton->SetForegroundColour(*wxWHITE);
 
     if (mediaCtrl) {
         mainSizer->Add(mediaCtrl, 1, wxEXPAND | wxALL, 10);
     }
-    mainSizer->Add(statusText, 0, wxALIGN_CENTER | wxTOP | wxBOTTOM, 10);
+    //mainSizer->Add(statusText, 0, wxALIGN_CENTER | wxTOP | wxBOTTOM, 10);
     mainSizer->Add(closeButton, 0, wxALIGN_CENTER | wxBOTTOM, 20);
 
     SetSizer(mainSizer);
@@ -270,21 +270,21 @@ VideoPanel::~VideoPanel()
 bool VideoPanel::LoadVideo(const wxString& videoFile)
 {
     if (!mediaCtrl) {
-        statusText->SetLabel("Ошибка: медиа-контрол не создан");
+        //statusText->SetLabel("Ошибка: медиа-контрол не создан");
         return false;
     }
 
     if (!wxFileExists(videoFile)) {
-        statusText->SetLabel("Ошибка: видеофайл не найден");
+        //statusText->SetLabel("Ошибка: видеофайл не найден");
         return false;
     }
 
-    statusText->SetLabel("Загрузка видео...");
+    //statusText->SetLabel("Загрузка видео...");
 
     // Пытаемся загрузить видео
     if (mediaCtrl->Load(videoFile)) {
         m_loaded = true;
-        statusText->SetLabel("Видео загружено. Нажмите Play для воспроизведения.");
+        // statusText->SetLabel("Видео загружено. Нажмите Play для воспроизведения.");
 
         // Устанавливаем обработчики событий
         mediaCtrl->Bind(wxEVT_MEDIA_LOADED, &VideoPanel::OnMediaLoaded, this, ID_MEDIA_CTRL);
@@ -294,12 +294,12 @@ bool VideoPanel::LoadVideo(const wxString& videoFile)
     }
     else {
         m_loaded = false;
-        statusText->SetLabel("Ошибка загрузки видео");
+        //statusText->SetLabel("Ошибка загрузки видео");
 
         // Пробуем альтернативный метод загрузки
         if (mediaCtrl->LoadURI(videoFile)) {
             m_loaded = true;
-            statusText->SetLabel("Видео загружено через URI");
+            //statusText->SetLabel("Видео загружено через URI");
             return true;
         }
 
@@ -312,7 +312,7 @@ void VideoPanel::Play()
     if (m_loaded && mediaCtrl) {
         mediaCtrl->SetVolume(1);
         mediaCtrl->Play();
-        statusText->SetLabel("Воспроизведение...");
+        //statusText->SetLabel("Воспроизведение...");
     }
 }
 
@@ -320,7 +320,7 @@ void VideoPanel::Stop()
 {
     if (mediaCtrl) {
         mediaCtrl->Stop();
-        statusText->SetLabel("Воспроизведение остановлено");
+        //statusText->SetLabel("Воспроизведение остановлено");
     }
 }
 
@@ -335,18 +335,18 @@ void VideoPanel::OnClose(wxCommandEvent& event)
 void VideoPanel::OnMediaLoaded(wxMediaEvent& event)
 {
     m_loaded = true;
-    statusText->SetLabel("Видео готово к воспроизведению");
+    //statusText->SetLabel("Видео готово к воспроизведению");
 
     // Автоматически запускаем воспроизведение после загрузки
     if (mediaCtrl) {
         mediaCtrl->Play();
-        statusText->SetLabel("Воспроизведение...");
+        //statusText->SetLabel("Воспроизведение...");
     }
 }
 
 void VideoPanel::OnMediaFinished(wxMediaEvent& event)
 {
-    statusText->SetLabel("Воспроизведение завершено");
+    //statusText->SetLabel("Воспроизведение завершено");
 
     // Перематываем в начало для возможного повторного воспроизведения
     if (mediaCtrl) {
@@ -356,7 +356,7 @@ void VideoPanel::OnMediaFinished(wxMediaEvent& event)
 
 void VideoPanel::OnMediaError(wxMediaEvent& event)
 {
-    statusText->SetLabel("Ошибка воспроизведения видео");
+    //statusText->SetLabel("Ошибка воспроизведения видео");
     m_loaded = false;
 }
 
@@ -404,19 +404,33 @@ GameBoardPanel::GameBoardPanel(wxWindow* parent, MainFrame* mainFrame)
     // Создаем кнопку "Природа" слева
     natureButton = new wxButton(this, wxID_ANY, "Природа",
         wxDefaultPosition, wxSize(150, 60));
-    //if (count < 16)
-    //{
-    //    natureButton->Disable();
-    //}
+    if (count < 16)
+    {
+        natureButton->Disable();
+        natureButton->SetBackgroundColour(wxColour(200, 200, 200));
+        natureButton->SetForegroundColour(*wxWHITE);
+    }
+    else
+    {
+        natureButton->SetBackgroundColour(wxColour(100, 150, 200));
+        natureButton->SetForegroundColour(*wxWHITE);
+    }
     natureButton->Bind(wxEVT_BUTTON, &GameBoardPanel::OnNatureButtonClick, this);
 
     // Создаем кнопку "Жизнь" справа  
     lifeButton = new wxButton(this, wxID_ANY, "Жизнь",
         wxDefaultPosition, wxSize(150, 60));
-    //if (count < 16)
-    //{
-    //    lifeButton->Disable();
-    //}
+    if (count < 16)
+    {
+        lifeButton->Disable();
+        lifeButton->SetBackgroundColour(wxColour(200, 200, 200));
+        lifeButton->SetForegroundColour(*wxWHITE);
+    }
+    else
+    {
+        lifeButton->SetBackgroundColour(wxColour(100, 150, 200));
+        lifeButton->SetForegroundColour(*wxWHITE);
+    }
     lifeButton->Bind(wxEVT_BUTTON, &GameBoardPanel::OnLifeButtonClick, this);
 
     // Добавляем кнопки в bottomSizer с отступами
@@ -537,19 +551,19 @@ void GameBoardPanel::OnCellClick(wxCommandEvent& event)
 void GameBoardPanel::OnNatureButtonClick(wxCommandEvent& event)
 {
     // Используем абсолютные пути для надежности
-    wxString videoPath = wxFileName::GetCwd() + wxFILE_SEP_PATH + "video.mp4";
+    wxString videoPath = wxFileName::GetCwd() + wxFILE_SEP_PATH + "nature_video.mp4";
     if (wxFileExists(videoPath)) {
         ShowVideoPanel(videoPath);
     }
     else {
         // Пробуем относительный путь
         //videoPath = "nature_video.mp4";
-        videoPath = "video.mp4";
+        videoPath = "nature_video.mp4";
         if (wxFileExists(videoPath)) {
             ShowVideoPanel(videoPath);
         }
         else {
-            wxMessageBox("Видеофайл 'video.mp4' не найден.\nПоместите файл в папку с приложением.",
+            wxMessageBox("Видеофайл 'nature_video.mp4' не найден.\nПоместите файл в папку с приложением.",
                 "Файл не найден", wxOK | wxICON_ERROR);
         }
     }
@@ -583,7 +597,7 @@ void GameBoardPanel::ShowVideoPanel(const wxString& videoFile)
     GetSizer()->Show(false);
 
     // Создаем и показываем панель с видео
-    videoPanel = new VideoPanel(this, videoFile);
+    videoPanel = new VideoPanel(this, videoFile, mainFrame->GetSize());
     videoPanel->SetSize(GetClientSize());
     videoPanel->Show();
 
